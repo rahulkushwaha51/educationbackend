@@ -1,9 +1,9 @@
 require('dotenv').config;
-require('./db/db.js')
+require('../db/db.js')
 const later = require('later')
 const express = require("express");
-const statsModel = require('./models/statsModel.js');
-const app = require('./index.js');
+const statsModel = require('../models/statsModel.js');
+const app = require('../index.js');
 
 const port = process.env.PORT
 app.listen(port, () => {

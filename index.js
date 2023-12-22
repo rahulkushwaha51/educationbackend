@@ -5,7 +5,6 @@ var cors = require('cors');
 const cookieParser = require('cookie-parser')
 const port = process.env.PORT;
 // const multer = require('multer')
-require('./db/db.js')
 
 const ErrorMiddleware = require('./middlewares/Error.js')
 
