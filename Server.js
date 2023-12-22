@@ -1,6 +1,6 @@
 require('dotenv').config;
 require('./db/db.js')
-const later = require('@breejs/later');
+const later = require('later')
 const express = require("express");
 const statsModel = require('./models/statsModel.js');
 const app = require('./index.js');
