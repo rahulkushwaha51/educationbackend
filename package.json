@@ -2,9 +2,9 @@
   "name": "registration",
   "version": "1.0.0",
   "description": "user registration",
-  "main": "server.js",
+  "main": "Server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node Server.js"
   },
   "author": "",
   "license": "ISC",
