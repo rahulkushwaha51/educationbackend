@@ -76,6 +76,9 @@ module.exports.logIn = catchAsyncError(async function logIn(req, res, next) {
 module.exports.logout = catchAsyncError(async function logout(req, res, next) {
     res.status(200).cookie('token', null, {
         expires: new Date(Date.now()),
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
     })
         .json({
             success: true,
