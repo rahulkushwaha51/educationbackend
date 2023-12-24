@@ -27,11 +27,11 @@ const courseSchema = new mongoose.Schema({
         video: {
             public_id: {
                 type: String,
-                required: true,
+                // required: true,
             },
             url: {
                 type: String,
-                required: true
+                // required: true
             }
         }
     }],
@@ -39,11 +39,11 @@ const courseSchema = new mongoose.Schema({
     poster: {
         public_id: {
             type: String,
-            required: true,
+            // required: true,
         },
         url: {
             type: String,
-            required: true
+            // required: true
         },
     },
 
@@ -71,7 +71,7 @@ const courseSchema = new mongoose.Schema({
     },
     // duration: {
     //     type: Number,
-    //     required: [true,"enter creator name"]
+    //     required: [true,"enter duration"]
     // },
     // price: {
     //     type: Number,

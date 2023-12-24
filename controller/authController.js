@@ -17,7 +17,7 @@ module.exports.register = catchAsyncError(async function register(req, res, next
     const { name, email, password } = req.body;
     const file = req.file;
 
-    if (!name || !email || !password || !file) {
+    if (!name || !email || !password) {
         return next(new ErrorHandler("Please enter all fields", 400));
     }
 
@@ -37,6 +37,7 @@ module.exports.register = catchAsyncError(async function register(req, res, next
         name,
         email,
         password,
+        confirmpassword,
         avatar: {
             public_id: myCloud.public_id,
             url: myCloud.secure_url,
@@ -89,7 +90,7 @@ module.exports.logout = catchAsyncError(async function logout(req, res, next) {
 
 // forget password
 
-module.exports.forgetPassword = catchAsyncError(async function forgetPassword(req, res) {
+module.exports.forgetPassword = catchAsyncError(async function forgetPassword(req, res,next) {
     let { email } = req.body;
     let user = await userModel.findOne({ email });
     if (!user)

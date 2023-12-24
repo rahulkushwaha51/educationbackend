@@ -26,8 +26,9 @@ courseRouter
     .post(isAuthenticated, authorizeAdmin, singleUpload, createCourse)
 
 
-// courseRouter
-//     .route("/deletecourse")
+courseRouter
+    .route("/updatecourse")
+    .patch(isAuthenticated,authorizeAdmin,updateCourse);
 
 
 // get Lectures
