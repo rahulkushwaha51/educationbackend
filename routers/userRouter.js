@@ -3,7 +3,7 @@ const userRouter = express.Router();
 const { getAllUser, getMyProfile, updateProfile, updateProfilePicture, removefromPlayList, addtoPlayList, updateUserRole, deleteUser, deleteMyProfile } = require("../controller/userController")
 const { register, logIn, logout, changePassword, forgetPassword, resetPassword, } = require("../controller/authController")
 const isAuthenticated = require('../middlewares/auth');
-const {authorizeAdmin} = require("../middlewares/authAdmin");
+const { authorizeAdmin } = require("../middlewares/authAdmin");
 const singleUpload = require("../middlewares/Multer");
 const { buySubscription, paymentVerification, getRazorpayKey, cancelSubscription } = require("../controller/paymentController");
 
@@ -42,14 +42,15 @@ userRouter
     .get(isAuthenticated, getMyProfile);
 
 userRouter
-    .route("/updateProfile")
-    .patch(isAuthenticated, updateProfilePicture)
-userRouter
-    .route("/me")
-    .delete(isAuthenticated,deleteMyProfile)
+    .route("/updateprofile")
+    .patch(isAuthenticated, updateProfile)
 
 userRouter
-    .route("/updatePicture")
+    .route("/me")
+    .delete(isAuthenticated, deleteMyProfile)
+
+userRouter
+    .route("/updatepicture")
     .patch(isAuthenticated, singleUpload, updateProfilePicture)
 
 
@@ -76,19 +77,19 @@ userRouter
     .delete(isAuthenticated, authorizeAdmin, removefromPlayList)
 
 userRouter
-.route("/subscribe")
-.get(isAuthenticated,buySubscription)
+    .route("/subscribe")
+    .get(isAuthenticated, buySubscription)
 
 userRouter
-.route('/paymentverfication')
-.post(isAuthenticated,paymentVerification);
+    .route('/paymentverfication')
+    .post(isAuthenticated, paymentVerification);
 
 userRouter
-.route('/razorpaykey')
-.get(getRazorpayKey)
+    .route('/razorpaykey')
+    .get(getRazorpayKey)
 
 userRouter
-.route('/subscribe/cancel')
-.delete(isAuthenticated,cancelSubscription)
+    .route('/subscribe/cancel')
+    .delete(isAuthenticated, cancelSubscription)
 
 module.exports = userRouter;
