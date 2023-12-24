@@ -44,7 +44,7 @@ module.exports.register = catchAsyncError(async function register(req, res, next
     });
 
     if (newUser) {
-        return SendToken(res, newUser, "Registered Successfully", 201);
+        return SendToken(res, newUser, "Registered Successfully", 200);
     } else {
         return res.json({
             message: "Error while signing up",
