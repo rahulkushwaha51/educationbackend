@@ -70,11 +70,11 @@ userRouter
 
 userRouter.
     route("/addtoplaylist")
-    .post(isAuthenticated, authorizeAdmin, addtoPlayList)
+    .post(isAuthenticated, addtoPlayList)
 
 userRouter
     .route("/removefromplaylist")
-    .delete(isAuthenticated, authorizeAdmin, removefromPlayList)
+    .delete(isAuthenticated, removefromPlayList)
 
 userRouter
     .route("/subscribe")

@@ -55,19 +55,20 @@ module.exports.createCourse = catchAsyncError(async function createCourse(req, r
     const file = req.file;
     if (!title || !description || !category || !CreatedBy)
         return next(new ErrorHandler("Please add all fields", 400))
-    // if (!file || !file.originalname)
-    //     return next(new ErrorHandler("File or originalname is missing", 400));
-    // const fileUri = await uploadFile(file);
-    // const myCloud = await cloudinary.uploader.upload(fileUri);
+    if (!file || !file.originalname)
+        return next(new ErrorHandler("File or originalname is missing", 400));
+    const fileUri = await uploadFile(file);
+    const myCloud = await cloudinary.uploader.upload(fileUri.content);
+    console.log(myCloud)
     await courseModel.create({
         title,
         description,
         category,
         CreatedBy,
-        // poster: {
-        //     public_id: myCloud.public_id,
-        //     url: myCloud.secure_url
-        // }
+        poster: {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url
+        }
     })
     res.status(201).json({
         success: true,
@@ -89,7 +90,7 @@ module.exports.getCourseLectures = catchAsyncError(async function getCourseLectu
 // add lectures max size 100mb
 module.exports.addLecture = catchAsyncError(async function addLecture(req, res, next) {
     const { id } = req.params;
- 
+
     const { title, description } = req.body
     const file = req.file;
     const course = await courseModel.findById(id)
