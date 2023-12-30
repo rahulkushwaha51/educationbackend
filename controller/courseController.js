@@ -89,10 +89,11 @@ module.exports.getCourseLectures = catchAsyncError(async function getCourseLectu
 })
 // add lectures max size 100mb
 module.exports.addLecture = catchAsyncError(async function addLecture(req, res, next) {
-    const { id } = req.params;
+    const {id}  = req.params;
 
     const { title, description } = req.body
     const file = req.file;
+    console.log(file)
     const course = await courseModel.findById(id)
     if (!course)
         return next(new ErrorHandler("Course not found", 404))
