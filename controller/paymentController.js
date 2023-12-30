@@ -11,7 +11,6 @@ module.exports.buySubscription = catchAsyncError(async function buySubscription(
   res,
   next
 ) {
-  console.log("req.user._id:", req.user._id);
   const user = await userModel.findById(req.user._id);
   if (user.role === "admin") {
     return next(new ErrorHandler("Admin can't buy subscription", 400));
@@ -45,7 +44,7 @@ module.exports.paymentVerification = catchAsyncError(
       .createHmac("sha256", process.env.RAZ_SECRET)
       .update(razorpay_payment_id + "|" + subscription_id, "utf-8")
       .digest("hex");
-    const isAuthentic = razorpay_signature === generated_signature;
+    const isAuthentic = generated_signature === razorpay_signature;
     if (!isAuthentic)
       return res.redirect(`${process.env.FRONTEND_URL}/paymentfailed`);
     // database comes here

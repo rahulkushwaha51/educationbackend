@@ -81,7 +81,7 @@ userRouter
     .get(isAuthenticated, buySubscription)
 
 userRouter
-    .route('/paymentverfication')
+    .route('/paymentverification')
     .post(isAuthenticated, paymentVerification);
 
 userRouter
