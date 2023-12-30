@@ -28,19 +28,19 @@ module.exports.register = catchAsyncError(async function register(req, res, next
     }
 
     // Upload file on Cloudinary
-    // const fileUri = await uploadFile(file);
+    const fileUri = await uploadFile(file);
     // Upload the file to Cloudinary
-    // const myCloud = await cloudinary.uploader.upload(fileUri.content);
+    const myCloud = await cloudinary.uploader.upload(fileUri.content);
 
     // Create and save the user
     const newUser = await userModel.create({
         name,
         email,
         password,
-        // avatar: {
-        //     public_id: myCloud.public_id,
-        //     url: myCloud.secure_url,
-        // },
+        avatar: {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        },
     });
 
     if (newUser) {
@@ -89,7 +89,7 @@ module.exports.logout = catchAsyncError(async function logout(req, res, next) {
 
 // forget password
 
-module.exports.forgetPassword = catchAsyncError(async function forgetPassword(req, res,next) {
+module.exports.forgetPassword = catchAsyncError(async function forgetPassword(req, res, next) {
     let { email } = req.body;
     let user = await userModel.findOne({ email });
     if (!user)
