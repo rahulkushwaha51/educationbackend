@@ -36,7 +36,7 @@ module.exports.buySubscription = catchAsyncError(async function buySubscription(
 // payment
 module.exports.paymentVerification = catchAsyncError(
   async function paymentVerification(req, res, next) {
-    const { razorpay_signature, razorpay_payment_id, razorpay__subscription_id } =
+    const { razorpay_signature, razorpay_payment_id, razorpay_subscription_id } =
       req.body;
     const user = await userModel.findById(req.user._id);
     const subscription_id = user.subscription_id;
@@ -51,10 +51,10 @@ module.exports.paymentVerification = catchAsyncError(
     await paymentModel.create({
       razorpay_signature,
       razorpay_payment_id,
-      razorpay__subscription_id,
+      razorpay_subscription_id,
     });
     user.subscription.status = "active";
-    user.save();
+   await user.save();
     res.redirect(
       `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
     );
