@@ -87,7 +87,7 @@ module.exports.getAllUser = catchAsyncError(async function getAllUser(req, res, 
 
     res.status(200).json({
         success: true,
-        data: users,
+        users: users,
     })
 })
 module.exports.updateUserRole = catchAsyncError(async function updateUserRole(req, res, next) {
