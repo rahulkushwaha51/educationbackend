@@ -1,7 +1,5 @@
 require('dotenv').config();
 const userModel = require("../models/userModel");
-const jwt = require("jsonwebtoken");
-const JWT_KEY = process.env.JWT_KEY;
 const ErrorHandler = require('../utility/errorHandler');
 const { SendToken } = require('../utility/SendToken');
 const catchAsyncError = require('../middlewares/catchAsyncError');
