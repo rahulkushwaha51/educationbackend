@@ -1,6 +1,7 @@
 const express = require("express");
 require('dotenv').config();
 const app = express();
+const app2 = express();
 var cors = require('cors');
 const cookieParser = require('cookie-parser')
 const port = process.env.PORT;
@@ -14,6 +15,11 @@ const ErrorMiddleware = require('./middlewares/Error.js')
 // });
 app.use(cors({
   origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+}));
+app2.use(cors({
+  origin: process.env.FRONTEND_URL2,
   credentials: true,
   methods: ["GET", "POST", "PATCH", "DELETE"],
 }));
