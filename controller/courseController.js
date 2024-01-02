@@ -5,8 +5,8 @@ const statsModel = require("../models/statsModel");
 const uploadFile = require('../utility/Upload');
 const ErrorHandler = require('../utility/errorHandler')
 const cloudinary = require('cloudinary').v2
-const DataUriParser = require("datauri/parser.js");
-const path = require("path");
+
+
 
 // getting all course avialable
 module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req, res, next) {
@@ -59,7 +59,6 @@ module.exports.createCourse = catchAsyncError(async function createCourse(req, r
         return next(new ErrorHandler("File or originalname is missing", 400));
     const fileUri = await uploadFile(file);
     const myCloud = await cloudinary.uploader.upload(fileUri.content);
-    console.log(myCloud)
     await courseModel.create({
         title,
         description,
@@ -93,7 +92,6 @@ module.exports.addLecture = catchAsyncError(async function addLecture(req, res, 
 
     const { title, description } = req.body
     const file = req.file;
-    console.log(file)
     const course = await courseModel.findById(id)
     if (!course)
         return next(new ErrorHandler("Course not found", 404))

@@ -80,8 +80,6 @@ module.exports.deleteUser = catchAsyncError(async function deleteUser(req, res, 
 
 module.exports.getAllUser = catchAsyncError(async function getAllUser(req, res, next) {
     let users = await userModel.find();
-
-
     if (!users)
         return next(new ErrorHandler("user not found", 404))
 
