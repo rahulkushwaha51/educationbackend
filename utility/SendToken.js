@@ -12,5 +12,6 @@ module.exports.SendToken = function (res, user, message, statusCode = 200) {
         success: true,
         message,
         user,
+        token
     })
 };
