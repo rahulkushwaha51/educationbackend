@@ -27,9 +27,9 @@ module.exports.buySubscription = catchAsyncError(async function buySubscription(
   user.subscription.id = subscription.id;
   user.subscription.status = subscription.status;
   await user.save();
-  res.status(200).json({
+  res.status(201).json({
     success: true,
-    subscription,
+    subscriptionId:subscription.id,
   });
 });
 
@@ -39,7 +39,7 @@ module.exports.paymentVerification = catchAsyncError(
     const { razorpay_signature, razorpay_payment_id, razorpay_subscription_id } =
       req.body;
     const user = await userModel.findById(req.user._id);
-    const subscription_id = user.subscription_id;
+    const subscription_id = user.subscription.id;
     const generated_signature = crypto
       .createHmac("sha256", process.env.RAZ_SECRET)
       .update(razorpay_payment_id + "|" + subscription_id, "utf-8")
