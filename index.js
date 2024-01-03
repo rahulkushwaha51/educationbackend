@@ -48,12 +48,9 @@ app2.use("/api/v1", otherRouter);
 // app.use("/review", reviewRouter)
 
 app.get("/", function (req, res) {
+  res.send(`<h1>Site is working fine. click <a href=${process.env.FRONTEND_URL2}>here</a> </h1>`)
   res.send(`<h1>Site is working fine. click <a href=${process.env.FRONTEND_URL}>here</a> </h1>`)
 })
-app.get("/", function (req, res) {
-  res.send(`<h1>Site is working fine. click <a href=${process.env.FRONTEND_URL2}>here</a> </h1>`)
-})
-
 app.use(ErrorMiddleware);
 
 
