@@ -1,12 +1,17 @@
 require('dotenv').config;
 require('../db/db.js')
 const statsModel = require('../models/statsModel.js');
-const app = require('../index.js');
+const {app,app2} = require('../index.js');
 const later = require('@breejs/later');
 
 const port = process.env.PORT
+const port2 = process.env.PORT2
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
+});
+
+app2.listen(port2, () => {
+    console.log(`Example app listening on port ${port2}`);
 });
 
 const schedule = later.parse.cron("0 0 0 1 * *");

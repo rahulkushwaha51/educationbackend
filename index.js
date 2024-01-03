@@ -27,6 +27,10 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }))
+app2.use(express.json());
+app2.use(express.urlencoded({
+  extended: true
+}))
 const userRouter = require('./routers/userRouter.js');
 const courseRouter = require('./routers/courseRouter.js')
 const otherRouter = require('./routers/otherRouter.js')
@@ -35,7 +39,12 @@ const otherRouter = require('./routers/otherRouter.js')
 app.use(cookieParser());
 app.use("/api/v1", userRouter);
 app.use("/api/v1", courseRouter);
-app.use("/api/v1", otherRouter);;
+app.use("/api/v1", otherRouter);
+
+app2.use(cookieParser());
+app2.use("/api/v1", userRouter);
+app2.use("/api/v1", courseRouter);
+app2.use("/api/v1", otherRouter);
 // app.use("/review", reviewRouter)
 
 app.get("/", function (req, res) {
@@ -45,4 +54,4 @@ app.get("/", function (req, res) {
 app.use(ErrorMiddleware);
 
 
-module.exports = app;
+module.exports = {app,app2};
