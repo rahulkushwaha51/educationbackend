@@ -14,12 +14,12 @@ const ErrorMiddleware = require('./middlewares/Error.js')
 //   console.log(`Example app listening on port ${port}`);
 // });
 
-app.use(cors());
-// app.use(cors({
-//   origin: process.env.FRONTEND_URL,
-//   credentials: true,
-//   methods: ["GET", "POST", "PATCH", "DELETE"],
-// }));
+// app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+}));
 app.use(express.json());
 app.use(express.urlencoded({
   extended: true
