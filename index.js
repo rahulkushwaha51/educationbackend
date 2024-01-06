@@ -13,22 +13,15 @@ const ErrorMiddleware = require('./middlewares/Error.js')
 // app.listen(port, () => {
 //   console.log(`Example app listening on port ${port}`);
 // });
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  methods: ["GET", "POST", "PATCH", "DELETE"],
-}));
-app2.use(cors({
-  origin: process.env.FRONTEND_URL2,
-  credentials: true,
-  methods: ["GET", "POST", "PATCH", "DELETE"],
-}));
+
+app.use(cors());
+// app.use(cors({
+//   origin: process.env.FRONTEND_URL,
+//   credentials: true,
+//   methods: ["GET", "POST", "PATCH", "DELETE"],
+// }));
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: true
-}))
-app2.use(express.json());
-app2.use(express.urlencoded({
   extended: true
 }))
 const userRouter = require('./routers/userRouter.js');
@@ -48,10 +41,9 @@ app2.use("/api/v1", otherRouter);
 // app.use("/review", reviewRouter)
 
 app.get("/", function (req, res) {
-  res.send(`<h1>Site is working fine. click <a href=${process.env.FRONTEND_URL2}>here</a> </h1>`)
   res.send(`<h1>Site is working fine. click <a href=${process.env.FRONTEND_URL}>here</a> </h1>`)
 })
 app.use(ErrorMiddleware);
 
 
-module.exports = {app,app2};
+module.exports = app;

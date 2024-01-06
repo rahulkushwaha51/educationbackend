@@ -29,7 +29,7 @@ module.exports.buySubscription = catchAsyncError(async function buySubscription(
   await user.save();
   res.status(201).json({
     success: true,
-    subscriptionId:subscription.id,
+    subscriptionId: subscription.id,
   });
 });
 
@@ -54,7 +54,7 @@ module.exports.paymentVerification = catchAsyncError(
       razorpay_subscription_id,
     });
     user.subscription.status = "active";
-   await user.save();
+    await user.save();
     res.redirect(
       `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
     );
@@ -73,7 +73,7 @@ module.exports.getRazorpayKey = catchAsyncError(async function getRazorpayKey(
 });
 
 module.exports.cancelSubscription = catchAsyncError(
-  async function getRazorcancelSubscriptionpayKey(req, res, next) {
+  async function cancelSubscription(req, res, next) {
     const user = await userModel.findById(req.user._id);
 
     const subscriptionId = user.subscription.id;
@@ -85,7 +85,9 @@ module.exports.cancelSubscription = catchAsyncError(
     const payment = await paymentModel.findOne({
       razorpay_subscription_id: subscriptionId,
     });
-    const gap = Date.now() - payment.CreatedAt;
+
+    // console.log(payment)
+    const gap = Date.now() - payment.createdAt;
 
     const refundTime = process.env.REFUND_DAYS * 24 * 60 * 60 * 1000;
 
@@ -97,7 +99,7 @@ module.exports.cancelSubscription = catchAsyncError(
 
     user.subscription.id = undefined;
     user.subscription.status = undefined;
-    await user.save();
+    await user.save()
     res.status(200).json({
       success: true,
       message: refund

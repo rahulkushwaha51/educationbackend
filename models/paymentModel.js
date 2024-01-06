@@ -13,7 +13,7 @@ const paymentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    CreatedAt: {
+    createdAt: {
         type: Date,
         default: Date.now,
     },
