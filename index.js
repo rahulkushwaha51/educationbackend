@@ -1,20 +1,14 @@
 const express = require("express");
 require('dotenv').config();
 const app = express();
-const app2 = express();
 var cors = require('cors');
 const cookieParser = require('cookie-parser')
 const port = process.env.PORT;
-// const multer = require('multer')
+
 
 const ErrorMiddleware = require('./middlewares/Error.js')
 
 
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`);
-// });
-
-// app.use(cors());
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true,
@@ -34,11 +28,6 @@ app.use("/api/v1", userRouter);
 app.use("/api/v1", courseRouter);
 app.use("/api/v1", otherRouter);
 
-app2.use(cookieParser());
-app2.use("/api/v1", userRouter);
-app2.use("/api/v1", courseRouter);
-app2.use("/api/v1", otherRouter);
-// app.use("/review", reviewRouter)
 
 app.get("/", function (req, res) {
   res.send(`<h1>Site is working fine. click <a href=${process.env.FRONTEND_URL}>here</a> </h1>`)
