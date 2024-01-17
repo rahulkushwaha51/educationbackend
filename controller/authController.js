@@ -15,7 +15,7 @@ module.exports.register = catchAsyncError(async function register(req, res, next
     const { name, email, password } = req.body;
     const file = req.file;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password||!file) {
         return next(new ErrorHandler("Please enter all fields", 400));
     }
 

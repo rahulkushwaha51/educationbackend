@@ -1,26 +1,23 @@
+const catchAsyncError = require("../middlewares/catchAsyncError");
 const CourseModel = require("../models/courseModel");
 const reviewModel = require("../models/reviewModel")
 
-module.exports.getAllReviews = async function getAllReviews(req, res) {
-    try {
-        const reviews = await reviewModel.find();
-        if (reviews) {
-            return res.json({
-                message: "reviews is retrived",
-                data: reviews
-            })
-        }
-        else {
-            return res.json({
-                message: "reviews not found"
-            })
-        }
-    } catch (error) {
+module.exports.getAllReviews = catchAsyncError(async function getAllReviews(req, res) {
+
+    const reviews = await reviewModel.find();
+    if (reviews) {
         return res.json({
-            message: error.message
+            message: "reviews is retrived",
+            data: reviews
         })
     }
-}
+    else {
+        return res.json({
+            message: "reviews not found"
+        })
+    }
+
+})
 
 module.exports.top3Reviews = async function top3Reviews(req, res) {
     try {

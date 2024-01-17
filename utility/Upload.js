@@ -6,11 +6,12 @@ const path = require("path");
 const ErrorHandler = require("./errorHandler");
 
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,
-    secure:true
+    cloud_name: 'rahul5198',
+    api_key: '692923422411118',
+    api_secret: 'lmtVseEPdc235zyYaWzK9ksptdU',
+    secure: true
 });
+
 
 const uploadFile = async function (file) {
     const parser = new DataUriParser();

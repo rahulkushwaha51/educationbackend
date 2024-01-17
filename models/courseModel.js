@@ -27,11 +27,11 @@ const courseSchema = new mongoose.Schema({
         video: {
             public_id: {
                 type: String,
-                // required: true,
+                required: true,
             },
             url: {
                 type: String,
-                // required: true
+                required: true
             }
         }
     }],
@@ -39,11 +39,11 @@ const courseSchema = new mongoose.Schema({
     poster: {
         public_id: {
             type: String,
-            // required: true,
+            required: true,
         },
         url: {
             type: String,
-            // required: true
+            required: true
         },
     },
 
@@ -69,28 +69,28 @@ const courseSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    // duration: {
-    //     type: Number,
-    //     required: [true,"enter duration"]
-    // },
-    // price: {
-    //     type: Number,
-    //     required: [true, 'price not entered']
-    // },
-    // level: {
-    //     type: String,
-    //     default: "beginner"
-    // },
-    // ratingsAverage: {
-    //     type: Number,
-    //     default: 1
-    // },
-    // discount: {
-    //     type: Number,
-    //     validate: [function () {
-    //         return this.discount < 100
-    //     }, 'discount cannot be more than price']
-    // },
+    duration: {
+        type: Number,
+        required: [true,"enter duration"]
+    },
+    price: {
+        type: Number,
+        required: [true, 'price not entered']
+    },
+    level: {
+        type: String,
+        default: "beginner"
+    },
+    ratingsAverage: {
+        type: Number,
+        default: 1
+    },
+    discount: {
+        type: Number,
+        validate: [function () {
+            return this.discount < 100
+        }, 'discount cannot be more than price']
+    },
 })
 
 const courseModel = mongoose.model('courseModel', courseSchema);
