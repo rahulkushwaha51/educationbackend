@@ -76,7 +76,7 @@ module.exports.deleteUser = catchAsyncError(async function deleteUser(req, res, 
         data: user
     });
 })
-//  get all user for admin only task
+//  get all user for admin only tasksdd
 
 module.exports.getAllUser = catchAsyncError(async function getAllUser(req, res, next) {
     let users = await userModel.find();
