@@ -51,16 +51,22 @@ module.exports.getCourse = catchAsyncError(async function getCourse(req, res) {
 })
 //  creating a course only for admin 
 module.exports.createCourse = catchAsyncError(async function createCourse(req, res, next) {
-    const data = req.body;
+    const {title,description,category,duration,price,level,CreatedBy} = req.body;
     const file = req.file;
-    if (!data)
+    if (!title || !description || !category || !CreatedBy||!level||!duration||!price)
         return next(new ErrorHandler("Please add all fields", 400))
     if (!file || !file.originalname)
         return next(new ErrorHandler("File or originalname is missing", 400));
     const fileUri = await uploadFile(file);
     const myCloud = await cloudinary.uploader.upload(fileUri.content);
     await courseModel.create({
-        data,
+        title,
+        description,
+        category,
+        CreatedBy,
+        level,
+        duration,
+        price,
         poster: {
             public_id: myCloud.public_id,
             url: myCloud.secure_url
