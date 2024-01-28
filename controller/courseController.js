@@ -26,11 +26,11 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
         },
        price: {
             $regex: price,
-            $options: "i",
+            $options: 0,
         },
         ratingsAverage: {
             $regex: ratingsAverage,
-            $options: "i",
+            $options: [1,2,3,4,5],
         }
     }).select("-lectures");
     if (courses) {
