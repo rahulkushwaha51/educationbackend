@@ -13,13 +13,23 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
 
     const keyword = req.query.keyword || "";
     const category = req.query.category || "";
+    const price = req.query.price || "";
+    const ratingsAverage = req.query.ratings || "";
     let courses = await courseModel.find({
         title: {
             $regex: keyword,
             $options: "i",
         },
         category: {
-            $regex: keyword,
+            $regex: category,
+            $options: "i",
+        },
+       price: {
+            $regex: price,
+            $options: "i",
+        },
+        ratingsAverage: {
+            $regex: ratingsAverage,
             $options: "i",
         }
     }).select("-lectures");
@@ -33,7 +43,7 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
 // getting top3 courses
 module.exports.getTop3Course = catchAsyncError(async function getTop3Course(req, res, next) {
     let top3Course = await courseModel.find().sort({ "ratingsAverage": - 1 }).limit(3);
-    res.json({
+    res.status(200).json({
         message: " top3 course retrieved successfully",
         data: top3Course
     })
