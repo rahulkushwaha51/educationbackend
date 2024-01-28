@@ -30,7 +30,7 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
         },
         ratingsAverage: {
             $regex: ratingsAverage,
-            $options: 1,
+            $options: 5,
         }
     }).select("-lectures");
     if (courses) {
