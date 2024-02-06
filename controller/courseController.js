@@ -13,8 +13,10 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
 
     const keyword = req.query.keyword || "";
     const category = req.query.category || "";
-    const price = req.query.price || "";
-    const ratingsAverage = req.query.ratings || "";
+    const minPrice = parseFloat(req.query.minPrice) || 0;
+    const maxPrice = parseFloat(req.query.price) || Infinity;
+    const minRatingsAverage = parseFloat(req.query.minRatings) || 0;
+    const maxRatingsAverage = parseFloat(req.query.ratings) ||5;
     let courses = await courseModel.find({
         title: {
             $regex: keyword,
@@ -24,14 +26,14 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
             $regex: category,
             $options: "i",
         },
-    //    price: {
-    //         $regex: price,
-    //         $options: 0,
-    //     },
-    //     ratingsAverage: {
-    //         $regex: ratingsAverage,
-    //         $options: 5,
-    //     }
+        price: {
+            $gte: minPrice,
+            $lte: maxPrice,
+        },
+        ratingsAverage: {
+            $gte: minRatingsAverage,
+            $lte: maxRatingsAverage,
+        }
     }).select("-lectures");
     if (courses) {
         res.status(200).json({
