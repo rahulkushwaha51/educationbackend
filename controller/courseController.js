@@ -24,14 +24,14 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
             $regex: category,
             $options: "i",
         },
-       price: {
-            $regex: price,
-            $options: 0,
-        },
-        ratingsAverage: {
-            $regex: ratingsAverage,
-            $options: 5,
-        }
+    //    price: {
+    //         $regex: price,
+    //         $options: 0,
+    //     },
+    //     ratingsAverage: {
+    //         $regex: ratingsAverage,
+    //         $options: 5,
+    //     }
     }).select("-lectures");
     if (courses) {
         res.status(200).json({
