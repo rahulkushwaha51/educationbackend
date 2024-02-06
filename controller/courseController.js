@@ -15,8 +15,8 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
     const category = req.query.category || "";
     const minPrice = parseFloat(req.query.minPrice) || 0;
     const maxPrice = parseFloat(req.query.price) || Infinity;
-    const minRatingsAverage = parseFloat(req.query.minRatings) || 1;
-    const maxRatingsAverage = parseFloat(req.query.ratings) ||5;
+    const minRatingsAverage = parseFloat(req.query.ratings) || 0;
+    const maxRatingsAverage = parseFloat(req.query.maxRatings) ||5;
     let courses = await courseModel.find({
         title: {
             $regex: keyword,

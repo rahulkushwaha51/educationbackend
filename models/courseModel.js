@@ -83,7 +83,8 @@ const courseSchema = new mongoose.Schema({
     },
     ratingsAverage: {
         type: Number,
-        default: 1
+        default: 1,
+        required:true
     },
     discount: {
         type: Number,
