@@ -7,9 +7,9 @@ const authorizeAdmin = catchAsyncError(async function (req, res, next) {
     if (!req.user || !req.user.role || req.user.role !== "admin") {
         return next(new ErrorHandler(`${req.user ? req.user.role : 'User'} is not allowed to access this resource`, 403));
     }
-
     next();
 });
+
 const authorizeSubscribers = catchAsyncError(async function (req, res, next) {
     // Ensure req.user exists and has a role property
 
