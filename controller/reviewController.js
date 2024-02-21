@@ -1,142 +1,105 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const CourseModel = require("../models/courseModel");
-const reviewModel = require("../models/reviewModel")
+const reviewModel = require("../models/reviewModel");
+const ErrorHandler = require("../utility/errorHandler");
 
 module.exports.getAllReviews = catchAsyncError(async function getAllReviews(req, res) {
 
     const reviews = await reviewModel.find();
-    if (reviews) {
-        return res.json({
-            message: "reviews is retrived",
-            data: reviews
-        })
+    if (!reviews) {
+        return next(new ErrorHandler("reviews not found", 404))
     }
-    else {
-        return res.json({
-            message: "reviews not found"
-        })
+
+    return res.status(200).json({
+        message: "reviews is retrived",
+        data: reviews
+    })
+
+
+})
+
+module.exports.top3Reviews = catchAsyncError(async function top3Reviews(req, res) {
+
+    const reviews = await reviewModel.find().sort({ ratings: -1 }).limit(3);
+
+    if (!reviews && !reviews.length > 0) { return next(new ErrorHandler("reviews not found", 404)) }
+
+    return res.status(200).json({
+        success: true,
+        message: "Top3 reviews",
+        data: reviews
+    });
+})
+
+
+module.exports.getCourseReviews = (async function getCourseReviews(req, res) {
+    let courseid = req.params.id;
+    let courseReview = await reviewModel.find();
+    courseReview = courseReview.filter(review => review.course.id === courseid);
+
+
+    if (!courseReview) {
+        return next(new ErrorHandler("reviews not found", 404))
+    } {
+        return res.status(200).json({
+            success: true,
+            message: "Course reviews",
+            data: courseReview
+        });
     }
 
 })
 
-module.exports.top3Reviews = async function top3Reviews(req, res) {
-    try {
-        const reviews = await reviewModel.find().sort({ ratings: -1 }).limit(3);
+module.exports.createReview = catchAsyncError(async function createReviews(req, res, next) {
 
-        if (reviews && reviews.length > 0) {
-            return res.json({
-                message: "Top 3 reviews retrieved",
-                data: reviews
-            });
-        } else {
-            return res.status(404).json({
-                message: "Reviews not found"
-            });
-        }
-    } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+    let id = req.params.id;
+    let Course = await CourseModel.findById(id);
+    let review = await reviewModel.create(req.body);
+    Course.ratingsAverage = (Course.ratingsAverage + req.body.ratings) / 2
+
+    await Course.save();
+    return res.status(200).json({
+        success: true,
+        message: "review created successfully",
+        data: review
+    })
+})
+module.exports.updateReviews = catchAsyncError(async function updateReviews(req, res, next) {
+
+    const id = req.params.id;
+    const dataToBeUpdate = req.body;
+
+    // Find the review by its ID
+    const review = await reviewModel.findById(id);
+    // Check if the review exists
+    if (!review) {
+        return next(new ErrorHandler("Review not found", 404));
     }
-}
-
-module.exports.getCourseReviews = async function getCourseReviews(req, res) {
-    try {
-        let courseid = req.params.id;
-        let courseReview = await reviewModel.find();
-        courseReview = courseReview.filter(review => review.course.id === courseid);
-
-
-        if (courseReview) {
-            return res.json({
-                message: "Course reviews retrieved",
-                data: courseReview
-            });
-        } else {
-            return res.status(404).json({
-                message: "Reviews not found for this course"
-            });
+    // Update the review fields
+    for (let key in dataToBeUpdate) {
+        if (review[key] !== undefined) {
+            review[key] = dataToBeUpdate[key];
         }
-    } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
     }
-}
+    // Save the updated review
+    const updatedReview = await review.save();
+    return res.status(200).json({
+        success: true,
+        message: "Review updated successfully",
+        data: updatedReview
+    });
+})
 
-module.exports.createReviews = async function createReviews(req, res) {
-    try {
-        let id = req.params.Course;
-        let Course = await CourseModel.findById(id);
-        let review = await reviewModel.create(req.body);
-        Course.ratingsAverage = (Course.ratingsAverage + req.body.ratings) / 2
+module.exports.deleteReviews = catchAsyncError(async function deleteReviews(req, res, next) {
 
-        await Course.save();
-        return res.json({
-            message: "review created successfully",
-            data: review
-        })
-
-
-    } catch (error) {
-        return res.json({
-            message: error.message
-        })
+    let id = req.params.id;
+    let review = await reviewModel.findByIdAndDelete(id);
+    if (!review) {
+        return next(new ErrorHandler("review not found", 404))
     }
-}
-module.exports.updateReviews = async function updateReviews(req, res) {
-    try {
-        const id = req.params.id;
-        const dataToBeUpdate = req.body;
-
-        // Find the review by its ID
-        const review = await reviewModel.findById(id);
-
-        // Check if the review exists
-        if (!review) {
-            return res.status(404).json({
-                message: "Review not found"
-            });
-        }
-
-        // Update the review fields
-        for (let key in dataToBeUpdate) {
-            if (review[key] !== undefined) {
-                review[key] = dataToBeUpdate[key];
-            }
-        }
-
-        // Save the updated review
-        const updatedReview = await review.save();
-
-        return res.json({
-            message: "Review updated successfully",
-            data: updatedReview
-        });
-    } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
-    }
-}
-
-module.exports.deleteReviews = async function deleteReviews(req, res) {
-    try {
-        let id = req.params.id;
-        let review = await reviewModel.findByIdAndDelete(id);
-        if (review) {
-
-            return res.json({
-                message: "review deleted successfully",
-                data: review
-            })
-        }
-        else {
-            return res.json({ message: "review not found" })
-        }
-    } catch (error) {
-        return res.json({
-            message: error.message
-        })
-    }
-}
+    return res.status(200).json({
+        success: true,
+        message: "review deleted successfully",
+        data: review
+    })
+})

@@ -65,7 +65,10 @@ const userSchema = mongoose.Schema({
     },
     resetPasswordToken: String,
     resetPasswordExpire: String,
-});
+},
+    {
+        timestamps: true
+    });
 // userSchema.pre('save', function () {
 //     return this.confirmpassword = undefined;
 // })

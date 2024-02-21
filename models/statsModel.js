@@ -20,7 +20,12 @@ const statsSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-});
+
+},
+    {
+        timestamps: true
+    }
+);
 
 const statsModel = mongoose.model('statsModel', statsSchema);
 

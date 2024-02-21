@@ -1,6 +1,6 @@
 const express = require('express');
-const { protectRoute } = require('../controller/authController');
-const { getAllReviews,top3Reviews, getCourseReviews, createReviews, updateReviews, deleteReviews } = require('../controller/reviewController');
+const { getAllReviews,top3Reviews, getCourseReviews, createReview, updateReviews, deleteReviews } = require('../controller/reviewController');
+const isAuthenticated = require('../middlewares/auth');
 const reviewRouter = express.Router();
 
 reviewRouter
@@ -16,10 +16,9 @@ reviewRouter
 .get(getCourseReviews)
 
 // crud operation
-reviewRouter.use(protectRoute)
 reviewRouter
-.route('/crud/:Course')
-.post(createReviews)
+.route('/createreview/:id')
+.post(isAuthenticated,createReview)
 
 reviewRouter
 .route('/crud/:id')

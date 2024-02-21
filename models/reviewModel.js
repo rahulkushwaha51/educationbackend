@@ -11,20 +11,18 @@ const reviewSchema = new mongoose.Schema({
         max: 5,
         required: [true, 'ratings need to be required']
     },
-    createdAt: {
-        type: Date,
-        default: Date.now()
-    },
     user: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'userModel',
-        required: [true, 'review belongs to a user']
+        // required: [true, 'review belongs to a user']
     },
     course: {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'courseModel',
-        required: [true, 'review must belongs to a Course']
+        // required: [true, 'review must belongs to a Course']
     }
+}, {
+    timestamps: true
 })
 
 reviewSchema.pre(/^find/, function (next) {

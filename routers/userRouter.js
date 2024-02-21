@@ -34,6 +34,7 @@ userRouter
 userRouter
     .route('/logout')
     .get(isAuthenticated, logout)
+ 
 
 // profile page for user
 
