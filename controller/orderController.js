@@ -3,8 +3,9 @@ const courseModel = require("../models/courseModel");
 const cartModel = require("../models/orderModel");
 
 const OrderModel = require('../models/orderModel');
-const userModel = require("../models/userModel");
 const ErrorHandler = require("../utility/errorHandler");
+
+
 module.exports.addtoCart = catchAsyncError(async function addtoCart(req, res, next) {
     const { courseId } = req.body;
     const userId = req.user._id;
@@ -21,10 +22,11 @@ module.exports.addtoCart = catchAsyncError(async function addtoCart(req, res, ne
         existingCourse.quantity++;
     } else {
         const course = await courseModel.findById(courseId);
+
         if (!course) {
             return next(new ErrorHandler("Course not found", 404));
         }
-        cart.items.push({ courseId, price: course.price });
+        cart.items.push({ courseId: courseId, price: course.price, image: course.poster.url, title: course.title });
     }
 
     cart.price = cart.items.reduce((total, item) => {
@@ -45,7 +47,7 @@ module.exports.getCart = catchAsyncError(async function getCart(req, res, next) 
 
     // If the cart doesn't exist or is empty, return an error
     if (!cart || cart.items.length === 0) {
-        return res.status(200).json({ success: true, message: "Cart is empty",cart });
+        return res.status(200).json({ success: true, message: "Cart is empty", cart });
     }
     res.status(200).json({ success: true, message: "cart fetched sucessfully", cart });
 });
@@ -72,12 +74,10 @@ module.exports.removeFromCart = catchAsyncError(async function removeFromCart(re
     }
 
     // Decrease the quantity of the item
-    if (item.quantity > 1) {
-        item.quantity--; // Decrease quantity if it's greater than 1
+    if (item.quantity == 1) {
+        return next(new ErrorHandler("Quantity cannot be less than 1", 400));
     } else {
-        // If the quantity is 1, remove the item from the cart
-        const index = cart.items.indexOf(item);
-        cart.items.splice(index, 1);
+        item.quantity--;
     }
 
     // Recalculate the total price of the cart
@@ -88,19 +88,24 @@ module.exports.removeFromCart = catchAsyncError(async function removeFromCart(re
 
     // Save the updated cart to the database
     await cart.save();
-    if (cart.items.length === 0) {
-        await cartModel.deleteOne({ userId });
-    }
-
     if (cart.items.length > 0) {
-        res.status(200).json({ success: true, message: 'Quantity updated in cart successfully', cart });
-    }
-    else {
-        res.status(200).json({ success: true, message: 'Course Removed From cart successfully', cart });
+        res.status(200).json({ success: true, message: 'Quantity decreased in cart successfully', cart });
     }
 });
 
+module.exports.clearCart = catchAsyncError(async function clearCart(req, res, next) {
 
+    const userId = req.user._id;
+    const cart = await cartModel.findOne({ userId });
+    console.log(cart);
+    if (!cart || cart.items.length === 0) {
+        return next(new ErrorHandler("Cart is empty", 400));
+    }
+   
+   await cartModel.findOneAndDelete({ userId });
+    res.status(200).json({ success: true, message: 'Cart cleared successfully'});
+
+})
 module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, next) {
     const { userId } = req.body;
 
