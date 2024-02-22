@@ -45,7 +45,7 @@ module.exports.getCart = catchAsyncError(async function getCart(req, res, next) 
 
     // If the cart doesn't exist or is empty, return an error
     if (!cart || cart.items.length === 0) {
-        return next(new ErrorHandler("Cart is empty", 401));
+        return res.status(404).json({ success: false, message: "Cart is empty",cart });
     }
     res.status(200).json({ success: true, message: "cart fetched sucessfully", cart });
 });

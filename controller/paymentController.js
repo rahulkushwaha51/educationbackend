@@ -6,11 +6,7 @@ const { instance } = require("../utility/instance");
 const crypto = require("crypto");
 
 // subscription
-module.exports.buySubscription = catchAsyncError(async function buySubscription(
-  req,
-  res,
-  next
-) {
+module.exports.buySubscription = catchAsyncError(async function buySubscription(req, res, next) {
   const user = await userModel.findById(req.user._id);
   if (user.role === "admin") {
     return next(new ErrorHandler("Admin can't buy subscription", 400));
@@ -32,6 +28,20 @@ module.exports.buySubscription = catchAsyncError(async function buySubscription(
     subscriptionId: subscription.id,
   });
 });
+
+// buy Course
+module.exports.checkout = catchAsyncError(async function buyCourse(req, res, next) {
+  const options = {
+    amount: Number(req.body.amount * 100),
+    currency: "INR",
+  }
+
+  const order = await instance.orders.create(options);
+  res.status(200).json({
+    success: true,
+    order,
+})
+})
 
 // payment
 module.exports.paymentVerification = catchAsyncError(
