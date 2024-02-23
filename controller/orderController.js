@@ -94,18 +94,39 @@ module.exports.removeFromCart = catchAsyncError(async function removeFromCart(re
 });
 
 module.exports.clearCart = catchAsyncError(async function clearCart(req, res, next) {
-
     const userId = req.user._id;
-    const cart = await cartModel.findOne({ userId });
-    console.log(cart);
+    const { courseId } = req.body;
+
+    // Find the user's cart
+    let cart = await cartModel.findOne({ userId });
+
+    // If the cart doesn't exist or is empty, return an error
     if (!cart || cart.items.length === 0) {
         return next(new ErrorHandler("Cart is empty", 400));
     }
-   
-   await cartModel.findOneAndDelete({ userId });
-    res.status(200).json({ success: true, message: 'Cart cleared successfully'});
 
-})
+    // Find the index of the item to be removed
+    const index = cart.items.findIndex(item => item.courseId.toString() === courseId.toString());
+    cart.items.splice(index, 1);
+
+    if (cart.items.length === 0) {
+        await cartModel.deleteOne({ userId });
+        return res.status(200).json({ success: true, message: 'Cart cleared successfully' });
+    } else {
+        // Recalculate the total price of the cart
+        cart.price = cart.items.reduce((total, item) => {
+            total += item.price * item.quantity;
+            return total;
+        }, 0);
+    }
+
+    // Save the updated cart to the database
+    await cart.save();
+
+    // Respond with success message
+    res.status(200).json({ success: true, message: 'Product removed from cart successfully' });
+});
+
 module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, next) {
     const { userId } = req.body;
 

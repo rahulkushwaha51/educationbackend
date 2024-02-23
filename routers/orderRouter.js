@@ -19,7 +19,7 @@ orderRouter
 
     orderRouter
     .route('/clearcart')
-    .get(isAuthenticated, clearCart)
+    .post(isAuthenticated, clearCart)
 
 orderRouter.route('/order')
     .post(isAuthenticated, placeOrder)
