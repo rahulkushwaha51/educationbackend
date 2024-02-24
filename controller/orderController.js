@@ -159,18 +159,19 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
 // buy Course
 module.exports.checkout = catchAsyncError(async function buyCourse(req, res, next) {
     const options = {
-      amount: Number(req.body.amount * 100),
-      currency: "INR",
+        amount: Number(req.body.amount * 100),
+        currency: "INR",
     }
-  
+
     const order = await instance.orders.create(options);
     res.status(200).json({
-      success: true,
-      order,
-  })
-  })
+        success: true,
+        order,
+    })
+})
 
-  // payment
-  module.exports.paymentValidation = catchAsyncError(async function paymentValidation(req, res, next) {
-    console.log("payment")}
-    )
+// payment
+module.exports.paymentValidation = catchAsyncError(async function paymentValidation(req, res, next) {
+    res.status(200).json({ success: true, message: "Payment Successful" })
+}
+)
