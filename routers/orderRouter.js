@@ -30,6 +30,6 @@ orderRouter
 
 orderRouter
     .route('/paymentvalidation')
-    .post(paymentValidation)
+    .post(isAuthenticated, paymentValidation)
 
 module.exports = orderRouter;

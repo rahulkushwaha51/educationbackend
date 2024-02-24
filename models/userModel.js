@@ -59,6 +59,13 @@ const userSchema = mongoose.Schema({
         },
         poster: String,
     },],
+
+    purchasedcourse: [{
+        course: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "orderModel"
+        }
+    }],
     createdAt: {
         type: Date,
         default: Date.now

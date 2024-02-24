@@ -157,7 +157,7 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
 });
 
 // buy Course
-module.exports.checkout = catchAsyncError(async function buyCourse(req, res, next) {
+module.exports.checkout = catchAsyncError(async function checkout(req, res, next) {
     const options = {
         amount: Number(req.body.amount * 100),
         currency: "INR",
@@ -172,6 +172,27 @@ module.exports.checkout = catchAsyncError(async function buyCourse(req, res, nex
 
 // payment
 module.exports.paymentValidation = catchAsyncError(async function paymentValidation(req, res, next) {
-    res.status(200).json({ success: true, message: "Payment Successful" })
+    const { razorpay_signature, razorpay_payment_id, razorpay_order_id } =
+        req.body;
+    const user = await userModel.findById(req.user._id);
+    const order_id = user.order.id;
+    const generated_signature = crypto
+        .createHmac("sha256", process.env.RAZ_SECRET)
+        .update(razorpay_payment_id + "|" + order_id, "utf-8")
+        .digest("hex");
+    const isAuthentic = generated_signature === razorpay_signature;
+    if (!isAuthentic)
+        return res.redirect(`${process.env.FRONTEND_URL}/paymentfailed`);
+    // database comes here
+    await paymentorderModel.create({
+        razorpay_signature,
+        razorpay_payment_id,
+        razorpay_order_id,
+    });
+    user.purchasedcourse.course = order_id;
+    await user.save();
+    res.redirect(
+        `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
+    );
 }
-)
+);
