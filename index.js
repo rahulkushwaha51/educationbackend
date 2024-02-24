@@ -9,11 +9,12 @@ const port = process.env.PORT;
 const ErrorMiddleware = require('./middlewares/Error.js')
 
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  methods: ["GET", "POST", "PATCH", "DELETE"],
-}));
+// app.use(cors({
+//   origin: process.env.FRONTEND_URL,
+//   credentials: true,
+//   methods: ["GET", "POST", "PATCH", "DELETE"],
+// }));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({
   extended: true
