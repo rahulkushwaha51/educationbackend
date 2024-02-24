@@ -181,14 +181,14 @@ module.exports.paymentValidation = catchAsyncError(async function paymentValidat
     if (!isAuthentic)
         return res.redirect(`${process.env.FRONTEND_URL}/paymentfailed`);
     // database comes here
-    // await paymentorderModel.create({
-    //     razorpay_signature,
-    //     razorpay_payment_id,
-    //     razorpay_order_id,
-    // });
+    await paymentorderModel.create({
+        razorpay_signature,
+        razorpay_payment_id,
+        razorpay_order_id,
+    });
     await user.save();
     res.redirect(
-        `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`
+        `${process.env.FRONTEND_URL}/orderpayment?reference=${razorpay_payment_id}`
     );
 }
 );
