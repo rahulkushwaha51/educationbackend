@@ -1,9 +1,10 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const courseModel = require("../models/courseModel");
-const cartModel = require("../models/orderModel");
+const cartModel = require("../models/cartModel");
 
-const OrderModel = require('../models/orderModel');
 const ErrorHandler = require("../utility/errorHandler");
+const orderModel = require("../models/orderModel");
+const paymentorderModel = require("../models/paymentorderModel");
 
 
 module.exports.addtoCart = catchAsyncError(async function addtoCart(req, res, next) {
@@ -128,29 +129,25 @@ module.exports.clearCart = catchAsyncError(async function clearCart(req, res, ne
 });
 
 module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, next) {
-    const { userId } = req.body;
-
+    const userId = req.user._id;
     // Find the cart associated with the user
     let cart = await cartModel.findOne({ userId });
-
     // If the cart doesn't exist or is empty, return an error
     if (!cart || cart.items.length === 0) {
         return next(new ErrorHandler("Cart is empty", 400));
     }
 
     // Create a new order object based on the cart contents
-    const order = new OrderModel({
+    let order = await orderModel.create({
         userId,
-        items: cart.items,
+        orderItems: cart.items,
         orderPrice: cart.price
     });
 
     await order.save();
 
     // Clear the user's cart after placing the order
-    cart.items = [];
-    cart.totalPrice = 0;
-    await cart.save();
+    await cartModel.deleteOne({ userId });
 
     // Respond with success message and the created order
     res.status(201).json({ success: true, message: 'Order placed successfully', order });
@@ -184,12 +181,11 @@ module.exports.paymentValidation = catchAsyncError(async function paymentValidat
     if (!isAuthentic)
         return res.redirect(`${process.env.FRONTEND_URL}/paymentfailed`);
     // database comes here
-    await paymentorderModel.create({
-        razorpay_signature,
-        razorpay_payment_id,
-        razorpay_order_id,
-    });
-    user.purchasedcourse.course = order_id;
+    // await paymentorderModel.create({
+    //     razorpay_signature,
+    //     razorpay_payment_id,
+    //     razorpay_order_id,
+    // });
     await user.save();
     res.redirect(
         `${process.env.FRONTEND_URL}/paymentsuccess?reference=${razorpay_payment_id}`

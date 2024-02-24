@@ -22,7 +22,7 @@ orderRouter
     .post(isAuthenticated, clearCart)
 
 orderRouter.route('/order')
-    .post(isAuthenticated, placeOrder)
+    .get(isAuthenticated, placeOrder)
 
 orderRouter
     .route('/checkout')

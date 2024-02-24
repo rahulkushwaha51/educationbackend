@@ -79,7 +79,6 @@ module.exports.cancelSubscription = catchAsyncError(
     let refund = false;
 
     // await instance.subscriptions.cancel(subscriptionId);
-    console.log(subscriptionId)
     const razorpay_subscription_id = subscriptionId
     const payment = await paymentModel.findOne({
       razorpay_subscription_id
