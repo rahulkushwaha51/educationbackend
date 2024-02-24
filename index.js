@@ -3,9 +3,6 @@ require('dotenv').config();
 const app = express();
 var cors = require('cors');
 const cookieParser = require('cookie-parser')
-const port = process.env.PORT;
-
-
 const ErrorMiddleware = require('./middlewares/Error.js')
 
 
@@ -16,9 +13,9 @@ const ErrorMiddleware = require('./middlewares/Error.js')
 // }));
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}))
+// app.use(express.urlencoded({
+//   extended: true
+// }))
 const userRouter = require('./routers/userRouter.js');
 const courseRouter = require('./routers/courseRouter.js')
 const otherRouter = require('./routers/otherRouter.js')
