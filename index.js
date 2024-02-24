@@ -6,16 +6,16 @@ const cookieParser = require('cookie-parser')
 const ErrorMiddleware = require('./middlewares/Error.js')
 
 
-// app.use(cors({
-//   origin: process.env.FRONTEND_URL,
-//   credentials: true,
-//   methods: ["GET", "POST", "PATCH", "DELETE"],
-// }));
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+}));
+
 app.use(express.json());
-// app.use(express.urlencoded({
-//   extended: true
-// }))
+app.use(express.urlencoded({
+  extended: true
+}))
 const userRouter = require('./routers/userRouter.js');
 const courseRouter = require('./routers/courseRouter.js')
 const otherRouter = require('./routers/otherRouter.js')
