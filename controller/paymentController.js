@@ -29,19 +29,7 @@ module.exports.buySubscription = catchAsyncError(async function buySubscription(
   });
 });
 
-// buy Course
-module.exports.checkout = catchAsyncError(async function buyCourse(req, res, next) {
-  const options = {
-    amount: Number(req.body.amount * 100),
-    currency: "INR",
-  }
 
-  const order = await instance.orders.create(options);
-  res.status(200).json({
-    success: true,
-    order,
-})
-})
 
 // payment
 module.exports.paymentVerification = catchAsyncError(

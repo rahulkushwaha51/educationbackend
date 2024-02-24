@@ -1,6 +1,6 @@
 const express = require('express');
 const orderRouter = express.Router();
-const { addtoCart, placeOrder, removeFromCart, getCart, clearCart } = require('../controller/orderController');
+const { addtoCart, placeOrder, removeFromCart, getCart, clearCart, paymentValidation } = require('../controller/orderController');
 const isAuthenticated = require('../middlewares/auth');
 const { checkout } = require('../controller/paymentController');
 
@@ -28,4 +28,9 @@ orderRouter.route('/order')
 orderRouter
     .route('/checkout')
     .post(isAuthenticated, checkout)
+
+orderRouter
+    .route('/paymentvalidation')
+    .post(paymentValidation)
+
 module.exports = orderRouter;
