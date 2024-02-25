@@ -5,6 +5,7 @@ const { instance } = require("../utility/instance");
 const ErrorHandler = require("../utility/errorHandler");
 const orderModel = require("../models/orderModel");
 const paymentorderModel = require("../models/paymentorderModel");
+const userModel = require("../models/userModel");
 
 
 module.exports.addtoCart = catchAsyncError(async function addtoCart(req, res, next) {
@@ -132,6 +133,7 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
     const userId = req.user._id;
     // Find the cart associated with the user
     let cart = await cartModel.findOne({ userId });
+    let user = await userModel.findById(userId)
     // If the cart doesn't exist or is empty, return an error
     if (!cart || cart.items.length === 0) {
         return next(new ErrorHandler("Cart is empty", 400));
@@ -145,11 +147,19 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
     });
 
     await order.save();
+    if (order) {
+        user.purchasedcourse.push(
+            {
+                course: order._id
+            }
+        )
+    }
 
+    await user.save();
     // Clear the user's cart after placing the order
     await cartModel.deleteOne({ userId });
 
-    // Respond with success message and the created order
+    // Respond with success message and the created {order
     res.status(201).json({ success: true, message: 'Order placed successfully', order });
 });
 
