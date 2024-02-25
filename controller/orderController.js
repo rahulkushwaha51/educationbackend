@@ -6,7 +6,7 @@ const ErrorHandler = require("../utility/errorHandler");
 const orderModel = require("../models/orderModel");
 const paymentorderModel = require("../models/paymentorderModel");
 const userModel = require("../models/userModel");
-
+const crypto = require("crypto");
 
 module.exports.addtoCart = catchAsyncError(async function addtoCart(req, res, next) {
     const { courseId } = req.body;
@@ -165,12 +165,27 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
 
 // buy Course
 module.exports.checkout = catchAsyncError(async function checkout(req, res, next) {
+
+    const userId = req.user._id;
+
+    const user = await userModel.findById(userId);
+
     const options = {
         amount: Number(req.body.amount * 100),
         currency: "INR",
     }
 
     const order = await instance.orders.create(options);
+
+    if (!order) {
+        return next(new ErrorHandler("Order not created", 400));
+    }
+
+    if(!user.order){
+        user.order={}
+    }
+    user.order.id=order.id
+    await user.save();
     res.status(200).json({
         success: true,
         order,
@@ -183,6 +198,7 @@ module.exports.paymentValidation = catchAsyncError(async function paymentValidat
         req.body;
     const user = await userModel.findById(req.user._id);
     const order_id = user.order.id;
+    console.log(order_id)
     const generated_signature = crypto
         .createHmac("sha256", process.env.RAZ_SECRET)
         .update(razorpay_payment_id + "|" + order_id, "utf-8")

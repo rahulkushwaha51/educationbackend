@@ -59,6 +59,9 @@ const userSchema = mongoose.Schema({
         },
         poster: String,
     },],
+    order: {
+       id: String,
+    },
 
     purchasedcourse: [{
         course: {
