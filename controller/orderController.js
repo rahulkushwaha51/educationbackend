@@ -150,7 +150,7 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
     if (order) {
         user.purchasedcourse.push(
             {
-                course: order._id
+                course: order.orderItems,
             }
         )
     }

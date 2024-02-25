@@ -63,12 +63,7 @@ const userSchema = mongoose.Schema({
        id: String,
     },
 
-    purchasedcourse: [{
-        course: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "orderModel"
-        }
-    }],
+    purchasedcourse: [],
     createdAt: {
         type: Date,
         default: Date.now
