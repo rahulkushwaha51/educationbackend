@@ -191,15 +191,12 @@ module.exports.checkout = catchAsyncError(async function checkout(req, res, next
 module.exports.paymentValidation = catchAsyncError(async function paymentValidation(req, res, next) {
     const { razorpay_signature, razorpay_payment_id, razorpay_order_id } =
         req.body;
-    const user = await userModel.findById(req.user._id);
-    console.log(razorpay_order_id)
-
+    const user = await userModel.findById(req.user._id)
     const body= razorpay_order_id + "|" + razorpay_payment_id;
     const generated_signature = crypto
         .createHmac("sha256", process.env.RAZ_SECRET)
         .update(body.toString())
         .digest("hex");
-        console.log(generated_signature)
     const isAuthentic = generated_signature === razorpay_signature;
     console.log(isAuthentic)
     if (!isAuthentic)
