@@ -146,18 +146,23 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
         orderPrice: cart.price
     });
 
-    await order.save();
+   
     if (order) {
-        user.purchasedcourse.push(
-            {
-                course: order.orderItems,
-            }
-        )
+        for (const course of order.orderItems) {
+            user.purchasedcourse.push(
+                {
+                    course: course.courseId,
+                    poster: course.image,
+                }
+            )
+        }
+
     }
 
+    await order.save();
     await user.save();
     // Clear the user's cart after placing the order
-    await cartModel.deleteOne({ userId });
+    // await cartModel.deleteOne({ userId });
 
     // Respond with success message and the created {order
     res.status(201).json({ success: true, message: 'Order placed successfully', order });
@@ -192,7 +197,7 @@ module.exports.paymentValidation = catchAsyncError(async function paymentValidat
     const { razorpay_signature, razorpay_payment_id, razorpay_order_id } =
         req.body;
     const user = await userModel.findById(req.user._id)
-    const body= razorpay_order_id + "|" + razorpay_payment_id;
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
     const generated_signature = crypto
         .createHmac("sha256", process.env.RAZ_SECRET)
         .update(body.toString())
