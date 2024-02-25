@@ -1,7 +1,7 @@
 const catchAsyncError = require("../middlewares/catchAsyncError");
 const courseModel = require("../models/courseModel");
 const cartModel = require("../models/cartModel");
-
+const { instance } = require("../utility/instance");
 const ErrorHandler = require("../utility/errorHandler");
 const orderModel = require("../models/orderModel");
 const paymentorderModel = require("../models/paymentorderModel");
