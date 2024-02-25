@@ -180,11 +180,6 @@ module.exports.checkout = catchAsyncError(async function checkout(req, res, next
     if (!order) {
         return next(new ErrorHandler("Order not created", 400));
     }
-
-    if(!user.order){
-        user.order={}
-    }
-    user.order.id=order.id
     await user.save();
     res.status(200).json({
         success: true,
@@ -197,16 +192,19 @@ module.exports.paymentValidation = catchAsyncError(async function paymentValidat
     const { razorpay_signature, razorpay_payment_id, razorpay_order_id } =
         req.body;
     const user = await userModel.findById(req.user._id);
-    const order_id = user.order.id;
-    console.log(order_id)
+    console.log(razorpay_order_id)
+
+    const body= razorpay_order_id + "|" + razorpay_payment_id;
     const generated_signature = crypto
         .createHmac("sha256", process.env.RAZ_SECRET)
-        .update(razorpay_payment_id + "|" + order_id, "utf-8")
+        .update(body.toString())
         .digest("hex");
+        console.log(generated_signature)
     const isAuthentic = generated_signature === razorpay_signature;
+    console.log(isAuthentic)
     if (!isAuthentic)
         return res.redirect(`${process.env.FRONTEND_URL}/paymentfailed`);
-    // database comes here
+    // // database comes here
     await paymentorderModel.create({
         razorpay_signature,
         razorpay_payment_id,
