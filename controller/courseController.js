@@ -17,7 +17,7 @@ module.exports.getAllCourses = catchAsyncError(async function getAllCourses(req,
     const minPrice = parseFloat(req.query.minPrice) || 0;
     const maxPrice = parseFloat(req.query.price) || Infinity;
     const minRatingsAverage = parseFloat(req.query.ratings) || 0;
-    const maxRatingsAverage = parseFloat(req.query.maxRatings) ||5;
+    const maxRatingsAverage = parseFloat(req.query.maxRatings) || 5;
     let courses = await courseModel.find({
         title: {
             $regex: keyword,
@@ -56,17 +56,17 @@ module.exports.getCourse = catchAsyncError(async function getCourse(req, res) {
     let id = req.params.id
     let course = await courseModel.findById(id);
     if (course) {
-        res.json({
-            message: "course is found",
-            data: course
+        res.status(200).json({
+            success: true,
+            course
         })
     }
 })
 //  creating a course only for admin 
 module.exports.createCourse = catchAsyncError(async function createCourse(req, res, next) {
-    const {title,description,category,duration,price,level,CreatedBy} = req.body;
+    const { title, description, category, duration, price, level, CreatedBy } = req.body;
     const file = req.file;
-    if (!title || !description || !category || !CreatedBy||!level||!duration||!price)
+    if (!title || !description || !category || !CreatedBy || !level || !duration || !price)
         return next(new ErrorHandler("Please add all fields", 400))
     if (!file || !file.originalname)
         return next(new ErrorHandler("File or originalname is missing", 400));

@@ -17,8 +17,9 @@ courseRouter
 
 // get own course -> login required
 courseRouter
-    .route('/:id')
-    .get(isAuthenticated, getCourse)
+    .route('/course/:id')
+    .get(getCourse)
+    .delete(isAuthenticated, authorizeAdmin,singleUpload, deleteCourse)
 // only admin can use this 
 
 courseRouter
@@ -33,13 +34,13 @@ courseRouter
 
 // get Lectures
 courseRouter
-    .route('/course/:id')
+    .route('/lecture/:id')
     .get(isAuthenticated, authorizeSubscribers, getCourseLectures)
     .post(isAuthenticated, authorizeAdmin, singleUpload, addLecture)
-    .delete(isAuthenticated, authorizeAdmin, deleteCourse)
+   
 
 courseRouter
-    .route('/lecture')
+    .route('/deletelecture')
     .delete(isAuthenticated, authorizeAdmin, singleUpload, deleteLecture)
 
 
