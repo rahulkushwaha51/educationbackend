@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const catchAsyncError = require('../middlewares/catchAsyncError');
 const courseModel = require('../models/courseModel');
@@ -47,7 +48,7 @@ module.exports.getTop3Course = catchAsyncError(async function getTop3Course(req,
     let top3Course = await courseModel.find().sort({ "ratingsAverage": - 1 }).limit(3);
     res.status(200).json({
         message: " top3 course retrieved successfully",
-        data: top3Course
+        top3Course
     })
 })
 // getting own course only for user available

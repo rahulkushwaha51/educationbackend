@@ -146,7 +146,7 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
         orderPrice: cart.price
     });
 
-   
+
     if (order) {
         for (const course of order.orderItems) {
             user.purchasedcourse.push(
