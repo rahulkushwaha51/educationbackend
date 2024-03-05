@@ -12,6 +12,7 @@
   "dependencies": {
     "@breejs/later": "^4.2.0",
     "bcrypt": "^5.1.1",
+    "blurhash": "^2.0.5",
     "cloudinary": "^1.41.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
