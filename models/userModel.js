@@ -60,14 +60,14 @@ const userSchema = mongoose.Schema({
         poster: String,
     },],
     purchasedcourse: [
-        {
-            course:
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "courseModel"
-            },
-            poster: String,
-        }
+        // {
+        //     course:
+        //     {
+        //         type: mongoose.Schema.Types.ObjectId,
+        //         ref: "courseModel"
+        //     },
+        //     poster: String,
+        // }
     ],
     createdAt: {
         type: Date,

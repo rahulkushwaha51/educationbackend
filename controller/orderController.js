@@ -148,11 +148,12 @@ module.exports.placeOrder = catchAsyncError(async function placeOrder(req, res, 
 
 
     if (order) {
-        for (const course of order.orderItems) {
+        for (const item of order.orderItems) {
+
+            let course = await courseModel.findById(item.courseId);
             user.purchasedcourse.push(
                 {
-                    course: course.courseId,
-                    poster: course.image,
+                    course: course
                 }
             )
         }
