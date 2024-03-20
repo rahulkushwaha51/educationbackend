@@ -3,7 +3,7 @@ const courseRouter = express.Router();
 const { getCourse, createCourse, updateCourse, deleteCourse, getTop3Course, getAllCourses, getCourseLectures, addLecture, deleteLecture } = require('../controller/courseController');
 const isAuthenticated = require('../middlewares/auth')
 const singleUpload = require('../middlewares/Multer');
-const { authorizeAdmin, authorizeSubscribers } = require('../middlewares/authAdmin');
+const { authorizeAdmin, } = require('../middlewares/authAdmin');
 // get all course
 
 courseRouter
@@ -35,7 +35,7 @@ courseRouter
 // get Lectures
 courseRouter
     .route('/lecture/:id')
-    .get(isAuthenticated, authorizeSubscribers, getCourseLectures)
+    .get(isAuthenticated , getCourseLectures)
     .post(isAuthenticated, authorizeAdmin, singleUpload, addLecture)
    
 
