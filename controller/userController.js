@@ -8,7 +8,7 @@ const cloudinary = require('cloudinary').v2;
 
 // get profile
 module.exports.getMyProfile = catchAsyncError(async function getMyProfile(req, res, next) {
-   
+
     let user = await userModel.findById(req.user._id);
     res.status(200).json({
         success: true,
