@@ -19,12 +19,11 @@ const timer = later.setInterval(async function () {
     }
 }, schedule);
 
-// const temp = async function temp() {
-//     await statsModel.create({});
-// }
-// temp()
-// To stop the timer after a certain number of executions (e.g., 5 times):
-// setTimeout(() => timer.clear(), 5 * 60 * 1000);
+const temp = async function temp() {
+    await statsModel.create({});
+}
+temp()
+setTimeout(() => timer.clear(), 5 * 60 * 1000);
 
 
 
